@@ -16,12 +16,15 @@ function Participate() {
           flexDirection: "column",
           justifyContent: "space-between",
           columnGap: "25px",
+          alignItems: "center",
         }}
       >
         <article style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex" }}>
             <input style={{ borderRadius: 10 }}></input>
-            <button>claim</button>
+            <button style={{ border: "1px solid black", borderRadius: 6 }}>
+              claim
+            </button>
           </div>
           <div
             style={{ display: "flex", flexDirection: "column", marginTop: 10 }}

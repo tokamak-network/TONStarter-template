@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectImage from "../assets/ProjectImage.svg";
 import "./overview.css";
 import HeadTitle from "./public/HeadTitle";
+import { useProjectInfo } from "../hook";
 
 function ProgressBar() {
   const [progress, setProgress] = useState(15); // State to manage progress
@@ -21,6 +22,7 @@ function ProgressBar() {
 }
 
 function Overview() {
+  const { projectInfo } = useProjectInfo();
   return (
     <section
       style={{
@@ -38,10 +40,12 @@ function Overview() {
           borderRadius: 10,
           padding: 8,
           fontSize: 18,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        TONStarter{" "}
-        <span style={{ color: "rgb(69, 214, 32)" }}>&nbsp;$Tokamak Bakery</span>
+        <span>TONStarter</span>
+        <span style={{ color: "rgb(69, 214, 32)" }}>${projectInfo?.name}</span>
       </header>
       <img
         src={ProjectImage}
