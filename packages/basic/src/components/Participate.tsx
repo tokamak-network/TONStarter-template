@@ -22,7 +22,13 @@ function Participate() {
         <article style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex" }}>
             <input style={{ borderRadius: 10 }}></input>
-            <button style={{ border: "1px solid black", borderRadius: 6 }}>
+            <button
+              style={{
+                border: "1px solid black",
+                borderRadius: 6,
+                marginLeft: 10,
+              }}
+            >
               claim
             </button>
           </div>
