@@ -51,46 +51,6 @@ function TxTable() {
       amount: 1000,
       date: "2024. 01. 02 08:43:59 (+09:00)",
     },
-    {
-      tx: "0xfb4f1c",
-      block: 5136990,
-      account: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-      type: "Claim",
-      amount: 1000,
-      date: "2024. 01. 02 08:43:59 (+09:00)",
-    },
-    {
-      tx: "0xfb4f1c",
-      block: 5136990,
-      account: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-      type: "Claim",
-      amount: 1000,
-      date: "2024. 01. 02 08:43:59 (+09:00)",
-    },
-    {
-      tx: "0xfb4f1c",
-      block: 5136990,
-      account: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-      type: "Claim",
-      amount: 1000,
-      date: "2024. 01. 02 08:43:59 (+09:00)",
-    },
-    {
-      tx: "0xfb4f1c",
-      block: 5136990,
-      account: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-      type: "Claim",
-      amount: 1000,
-      date: "2024. 01. 02 08:43:59 (+09:00)",
-    },
-    {
-      tx: "0xfb4f1c",
-      block: 5136990,
-      account: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-      type: "Claim",
-      amount: 1000,
-      date: "2024. 01. 02 08:43:59 (+09:00)",
-    },
   ];
   return (
     <div>
@@ -135,7 +95,7 @@ function TxTable() {
       >
         <button>FIRST</button>
         <button>{"<"}</button>
-        <span style={{ marginTop: 9 }}>1 OF 156</span>
+        <span>1 OF 156</span>
         <button>{">"}</button>
         <button>LAST</button>
       </div>
