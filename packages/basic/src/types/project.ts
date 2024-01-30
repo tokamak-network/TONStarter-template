@@ -1,7 +1,10 @@
-export type ProjectInfo = {
-  name: string;
-  id: number;
-  owner: string;
-  l1Token: string;
-  l2Token: string;
-};
+import {
+  ProjectInfo,
+  ManageInfo,
+  SaleInfo,
+  TimeInfo,
+  ClaimInfo,
+  Status,
+} from "tokamak-dapp-sdk/types/tonstarter";
+
+export type { ProjectInfo, ManageInfo, SaleInfo, TimeInfo, ClaimInfo, Status };

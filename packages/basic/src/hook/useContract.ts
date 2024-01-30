@@ -1,7 +1,13 @@
-import { Contract, ethers } from "ethers";
-import { MultiChainSDK } from "../constants/sdk";
 import { useEffect, useState } from "react";
-import { ProjectInfo } from "../types";
+import { ProjectManager } from "tokamak-dapp-sdk/tonstarter";
+import {
+  ClaimInfo,
+  ManageInfo,
+  ProjectInfo,
+  SaleInfo,
+  Status,
+  TimeInfo,
+} from "../types";
 
 export const useContract = () => {};
 
@@ -11,29 +17,65 @@ export const useProjectInfo = () => {
   const [projectInfo, setProjectInfo] = useState<ProjectInfo | undefined>(
     undefined
   );
-  const L2ProjectManagerProxy = MultiChainSDK.getContract(
-    "L2ProjectManagerProxy"
+  const [manageInfo, setManageInfo] = useState<ManageInfo | undefined>(
+    undefined
   );
+  const [saleInfo, setSaleInfo] = useState<SaleInfo | undefined>(undefined);
+  const [timeInfo, setTimeInfo] = useState<TimeInfo | undefined>(undefined);
+  const [claimInfo, setClaimInfo] = useState<ClaimInfo | undefined>(undefined);
+  const [status, setStatus] = useState<Status | undefined>(undefined);
+
   const L2_TOKEN = process.env.REACT_APP_L2TOKEN;
 
   useEffect(() => {
     const fetchProjectInfo = async () => {
-      const project = await L2ProjectManagerProxy.projects(L2_TOKEN);
-      console.log(project);
-      const result = {
-        name: project.projectName,
-        id: Number(project?.projectId?.toString()),
-        owner: project.projectOwner,
-        l1Token: project.l1Token,
-        l2Token: project.l2Token,
-      };
-      setProjectInfo(result);
+      const ProjectManagerSDK = new ProjectManager({
+        chainId: 5050,
+        l2Token: L2_TOKEN as string,
+      });
+
+      await ProjectManagerSDK.syncData();
+
+      const {
+        projectInfo,
+        manageInfo,
+        saleInfo,
+        timeInfo,
+        claimInfo,
+        isSet,
+        status,
+      } = ProjectManagerSDK;
+
+      // if (!isSet) {
+      //   setProjectInfo(undefined);
+      //   setManageInfo(undefined);
+      //   setSaleInfo(undefined);
+      //   setTimeInfo(undefined);
+      //   setClaimInfo(undefined);
+      //   return;
+      // }
+
+      if (
+        projectInfo &&
+        manageInfo &&
+        saleInfo &&
+        timeInfo &&
+        claimInfo &&
+        status
+      ) {
+        setProjectInfo(projectInfo);
+        setManageInfo(manageInfo);
+        setSaleInfo(saleInfo);
+        setTimeInfo(timeInfo);
+        setClaimInfo(claimInfo);
+        setStatus(status);
+      }
     };
 
-    if (projectInfo === undefined) {
+    if (L2_TOKEN !== undefined) {
       fetchProjectInfo();
     }
-  }, [L2ProjectManagerProxy, L2_TOKEN]);
+  }, [L2_TOKEN]);
 
-  return { projectInfo };
+  return { projectInfo, manageInfo, saleInfo, timeInfo, claimInfo };
 };

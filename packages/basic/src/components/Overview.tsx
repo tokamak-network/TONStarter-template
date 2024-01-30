@@ -23,6 +23,7 @@ function ProgressBar() {
 
 function Overview() {
   const { projectInfo } = useProjectInfo();
+
   return (
     <section
       style={{
@@ -34,7 +35,6 @@ function Overview() {
     >
       <header
         style={{
-          width: 190,
           textAlign: "center",
           backgroundColor: "#F1F5F9",
           borderRadius: 10,
@@ -45,7 +45,11 @@ function Overview() {
         }}
       >
         <span>TONStarter</span>
-        <span style={{ color: "rgb(69, 214, 32)" }}>${projectInfo?.name}</span>
+        <span style={{ color: projectInfo?.name ? "rgb(69, 214, 32)" : "red" }}>
+          $
+          {projectInfo?.name ??
+            "You need to check whether your L2 Token Address or vaults have been set up."}
+        </span>
       </header>
       <img
         src={ProjectImage}
