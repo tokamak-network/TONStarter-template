@@ -11,7 +11,7 @@ function Transactions() {
       }}
     >
       <HeadTitle title="Transactions"></HeadTitle>
-      <TxTable />
+      {/* <TxTable /> */}
     </section>
   );
 }

@@ -22,7 +22,8 @@ function ProgressBar() {
 }
 
 function Overview() {
-  const { projectInfo } = useProjectInfo();
+  const { projectInfo, timeInfo, saleInfo, status, manageInfo } =
+    useProjectInfo();
 
   return (
     <section
@@ -58,14 +59,21 @@ function Overview() {
       />
       <article style={{ textAlign: "center" }}>
         <HeadTitle
-          title="Public Round 1"
+          title={status?.currentStep ?? "-"}
           style={{ margin: 0, marginBottom: 15 }}
         ></HeadTitle>
         <ProgressBar />
-        <p style={{ textAlign: "right", fontSize: 12, fontWeight: "bold" }}>
-          <span style={{ color: "rgb(69, 214, 32)" }}> 3,102,000 </span>
-          OF 21,000,000 TKB SOLD
-        </p>
+        {saleInfo ? (
+          <p style={{ textAlign: "right", fontSize: 12, fontWeight: "bold" }}>
+            <span style={{ color: "rgb(69, 214, 32)" }}>
+              {" "}
+              {saleInfo?.total1rdSaleAmount}
+            </span>
+            OF {saleInfo?.total1rdSaleAmount} {} SOLD
+          </p>
+        ) : (
+          "-"
+        )}
       </article>
     </section>
   );

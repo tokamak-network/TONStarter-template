@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ProjectManager } from "tokamak-dapp-sdk/tonstarter";
+import { ProjectManager } from "tokamak-dapp-sdk/dist/__commonjs/tonstarter";
 import {
   ClaimInfo,
   ManageInfo,
@@ -7,7 +7,9 @@ import {
   SaleInfo,
   Status,
   TimeInfo,
+  UserInfo,
 } from "../types";
+import { Contract } from "ethers";
 
 export const useContract = () => {};
 
@@ -23,8 +25,8 @@ export const useProjectInfo = () => {
   const [saleInfo, setSaleInfo] = useState<SaleInfo | undefined>(undefined);
   const [timeInfo, setTimeInfo] = useState<TimeInfo | undefined>(undefined);
   const [claimInfo, setClaimInfo] = useState<ClaimInfo | undefined>(undefined);
+  const [userInfo, setUserInfo] = useState<UserInfo | undefined>(undefined);
   const [status, setStatus] = useState<Status | undefined>(undefined);
-
   const L2_TOKEN = process.env.REACT_APP_L2TOKEN;
 
   useEffect(() => {
@@ -42,18 +44,10 @@ export const useProjectInfo = () => {
         saleInfo,
         timeInfo,
         claimInfo,
+        userInfo,
         isSet,
         status,
       } = ProjectManagerSDK;
-
-      // if (!isSet) {
-      //   setProjectInfo(undefined);
-      //   setManageInfo(undefined);
-      //   setSaleInfo(undefined);
-      //   setTimeInfo(undefined);
-      //   setClaimInfo(undefined);
-      //   return;
-      // }
 
       if (
         projectInfo &&
@@ -61,6 +55,7 @@ export const useProjectInfo = () => {
         saleInfo &&
         timeInfo &&
         claimInfo &&
+        userInfo &&
         status
       ) {
         setProjectInfo(projectInfo);
@@ -69,13 +64,25 @@ export const useProjectInfo = () => {
         setTimeInfo(timeInfo);
         setClaimInfo(claimInfo);
         setStatus(status);
+        setUserInfo(userInfo);
       }
     };
 
     if (L2_TOKEN !== undefined) {
-      fetchProjectInfo();
+      fetchProjectInfo().catch((e) => {
+        console.log("**fetch error on fetchProjectInfo()**");
+        console.log(e);
+      });
     }
   }, [L2_TOKEN]);
 
-  return { projectInfo, manageInfo, saleInfo, timeInfo, claimInfo };
+  return {
+    projectInfo,
+    manageInfo,
+    saleInfo,
+    timeInfo,
+    claimInfo,
+    userInfo,
+    status,
+  };
 };

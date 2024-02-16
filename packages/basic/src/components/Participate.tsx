@@ -1,6 +1,82 @@
+import { useMemo } from "react";
+import { useProjectInfo } from "../hook";
 import HeadTitle from "./public/HeadTitle";
 
 function Participate() {
+  const { status, userInfo } = useProjectInfo();
+
+  const ParticipatingContainer = useMemo(() => {
+    switch (status?.currentStep) {
+      case "snapshot":
+        return <>gogo</>;
+      case "whitelist":
+        return (
+          <>
+            {" "}
+            <button
+              style={{
+                border: "1px solid black",
+                borderRadius: 6,
+                marginLeft: 10,
+              }}
+            >
+              add whitelist
+            </button>
+          </>
+        );
+      case "round1":
+        return (
+          <>
+            {" "}
+            <input style={{ borderRadius: 10 }}></input>
+            <button
+              style={{
+                border: "1px solid black",
+                borderRadius: 6,
+                marginLeft: 10,
+              }}
+            >
+              claim
+            </button>
+          </>
+        );
+      case "round2":
+        return (
+          <>
+            {" "}
+            <input style={{ borderRadius: 10 }}></input>
+            <button
+              style={{
+                border: "1px solid black",
+                borderRadius: 6,
+                marginLeft: 10,
+              }}
+            >
+              claim
+            </button>
+          </>
+        );
+      case "claim":
+        return (
+          <>
+            {" "}
+            <input style={{ borderRadius: 10 }}></input>
+            <button
+              style={{
+                border: "1px solid black",
+                borderRadius: 6,
+                marginLeft: 10,
+              }}
+            >
+              claim
+            </button>
+          </>
+        );
+      default:
+        return <>-</>;
+    }
+  }, [status?.currentStep]);
+
   return (
     <section
       style={{
@@ -20,18 +96,7 @@ function Participate() {
         }}
       >
         <article style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex" }}>
-            <input style={{ borderRadius: 10 }}></input>
-            <button
-              style={{
-                border: "1px solid black",
-                borderRadius: 6,
-                marginLeft: 10,
-              }}
-            >
-              claim
-            </button>
-          </div>
+          <div style={{ display: "flex" }}>{ParticipatingContainer}</div>
           <div
             style={{ display: "flex", flexDirection: "column", marginTop: 10 }}
           >
@@ -72,7 +137,7 @@ function Participate() {
             >
               <span>Your sTOS: 5,000</span>
               <span style={{ color: "#0070ED", fontWeight: "bold" }}>
-                Your tier: 2
+                Your tier:
               </span>
             </div>
           </article>
@@ -102,7 +167,7 @@ function Participate() {
               }}
             >
               <span style={{ color: "#0070ED", fontWeight: "bold" }}>
-                Current status : Round 1
+                Current status : {status?.currentStep ?? "not setup yet"}
               </span>
             </div>
           </article>
