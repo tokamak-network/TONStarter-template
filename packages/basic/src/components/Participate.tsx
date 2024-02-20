@@ -1,14 +1,23 @@
+import React from "react";
 import { useMemo } from "react";
 import { useProjectInfo } from "../hook";
 import HeadTitle from "./public/HeadTitle";
+import { useUser } from "../hook/useUser";
 
 function Participate() {
-  const { status, userInfo } = useProjectInfo();
+  const { status, userInfo, saleInfo } = useProjectInfo();
+  const { tonBalance } = useUser();
+
+  // console.log("tonBalance", tonBalance);
+  // console.log(userInfo);
+  // console.log(saleInfo);
+  // console.log(status);
 
   const ParticipatingContainer = useMemo(() => {
     switch (status?.currentStep) {
       case "snapshot":
         return <>gogo</>;
+
       case "whitelist":
         return (
           <>
@@ -101,7 +110,7 @@ function Participate() {
             style={{ display: "flex", flexDirection: "column", marginTop: 10 }}
           >
             <div>
-              <span>your TON : </span>
+              <span>your TON : {tonBalance ?? "-"}</span>
             </div>
             <div>
               <span>Puchased : </span>

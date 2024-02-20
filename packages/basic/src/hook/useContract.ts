@@ -10,6 +10,7 @@ import {
   UserInfo,
 } from "../types";
 import { Contract } from "ethers";
+import { useUser } from "./useUser";
 
 export const useContract = () => {};
 
@@ -28,12 +29,14 @@ export const useProjectInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>(undefined);
   const [status, setStatus] = useState<Status | undefined>(undefined);
   const L2_TOKEN = process.env.REACT_APP_L2TOKEN;
+  const { userAccount } = useUser();
 
   useEffect(() => {
     const fetchProjectInfo = async () => {
       const ProjectManagerSDK = new ProjectManager({
         chainId: 5050,
         l2Token: L2_TOKEN as string,
+        account: userAccount,
       });
 
       await ProjectManagerSDK.syncData();
@@ -74,7 +77,7 @@ export const useProjectInfo = () => {
         console.log(e);
       });
     }
-  }, [L2_TOKEN]);
+  }, [L2_TOKEN, userAccount]);
 
   return {
     projectInfo,

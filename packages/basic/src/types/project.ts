@@ -4,11 +4,9 @@ import {
   SaleInfo,
   TimeInfo,
   ClaimInfo,
-  UserInfoMap,
+  UserInfo,
   Status,
 } from "tokamak-dapp-sdk/dist/types/tonstarter";
-
-type UserInfo = UserInfoMap[keyof UserInfoMap];
 
 export type {
   ProjectInfo,
@@ -17,6 +15,5 @@ export type {
   TimeInfo,
   ClaimInfo,
   UserInfo,
-  UserInfoMap,
   Status,
 };

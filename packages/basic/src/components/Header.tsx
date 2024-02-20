@@ -1,4 +1,8 @@
+import React from "react";
+import { useUser } from "../hook/useUser";
+
 function Header() {
+  const { connectWallet, userAccount } = useUser();
   return (
     <header
       style={{
@@ -19,8 +23,11 @@ function Header() {
           borderColor: "none",
           cursor: "pointer",
         }}
+        onClick={connectWallet}
       >
-        Connect Wallet
+        {userAccount
+          ? `${userAccount.slice(0, 4)}...${userAccount.slice(-4)}`
+          : "Connect Wallet"}
       </button>
     </header>
   );
