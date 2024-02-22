@@ -10,7 +10,6 @@ import {
   UserInfo,
   TokenInfo,
 } from "../types";
-import { Contract } from "ethers";
 import { useUser } from "./useUser";
 
 export const useContract = () => {};

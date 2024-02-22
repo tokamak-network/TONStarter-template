@@ -4,12 +4,21 @@ import { useProjectInfo } from "../hook";
 import HeadTitle from "./public/HeadTitle";
 import { useUser } from "../hook/useUser";
 import { formatTimestamp } from "../utils/convertTimestamp";
+import commafy from "../utils/commafy";
 
 function Participate() {
-  const { status, userInfo, saleInfo, timeInfo, tokenInfo } = useProjectInfo();
+  const {
+    status,
+    userInfo,
+    saleInfo,
+    timeInfo,
+    tokenInfo,
+    claimInfo,
+    manageInfo,
+  } = useProjectInfo();
   const { tonBalance } = useUser();
 
-  console.log("userInfo", userInfo);
+  console.log(manageInfo);
 
   const ParticipatingContainer = useMemo(() => {
     switch (status?.currentStep) {
@@ -127,12 +136,80 @@ function Participate() {
         </article>
         <section
           style={{
-            fontSize: 13,
+            fontSize: 16,
             height: "100%",
             display: "flex",
             marginTop: "25px",
           }}
         >
+          <article
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <span
+              style={{
+                color: status?.currentStep === "snapshot" ? "#0070ED" : "",
+                fontWeight: status?.currentStep === "snapshot" ? "bold" : "",
+              }}
+            >
+              Snapshot{" "}
+            </span>
+            <span
+              style={{
+                marginBottom: 5,
+                color: status?.currentStep === "snapshot" ? "#0070ED" : "",
+                fontWeight: status?.currentStep === "snapshot" ? "bold" : "",
+              }}
+            >
+              {formatTimestamp(timeInfo?.snapshot)}
+            </span>
+            <span>Whitelist</span>
+            <span style={{ marginBottom: 5 }}>
+              {" "}
+              {formatTimestamp(timeInfo?.whiteListStartTime) ??
+                "round1StartTime"}{" "}
+              ~ {formatTimestamp(timeInfo?.whiteListEndTime) ?? "round1EndTime"}{" "}
+            </span>
+            <span>
+              Round 1 - {commafy(manageInfo?.set1rdTokenAmount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}{" "}
+            </span>
+            <span style={{ marginBottom: 5 }}>
+              {" "}
+              {formatTimestamp(timeInfo?.round1StartTime) ??
+                "round1StartTime"}{" "}
+              ~ {formatTimestamp(timeInfo?.round1EndTime) ?? "round1EndTime"}{" "}
+            </span>
+            <span>
+              Round 2 - {commafy(manageInfo?.set2rdTokenAmount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}
+            </span>
+            <span style={{ marginBottom: 5 }}>
+              {" "}
+              {formatTimestamp(timeInfo?.round2StartTime) ?? "-"} ~{" "}
+              {formatTimestamp(timeInfo?.round2EndTime) ?? "-"}{" "}
+            </span>
+            <span>Claim </span>
+            <span style={{ marginBottom: 5 }}>
+              {" "}
+              {formatTimestamp(claimInfo?.firstClaimTime) ?? "-"} ~{" "}
+              {formatTimestamp(
+                (claimInfo?.secondClaimTime as number) +
+                  ((claimInfo?.totalClaimCounts as number) - 2) *
+                    //@ts-ignore
+                    claimInfo?.claimInterval
+              ) ?? "-"}{" "}
+            </span>
+          </article>
+          <div
+            style={{
+              borderLeft: "1px solid black",
+              marginLeft: "15px",
+              marginRight: "15px",
+            }}
+          ></div>
           <article style={{ display: "flex", flexDirection: "column" }}>
             <span>Tier 1 (100 sTOS) : 2,000,000 {tokenInfo?.tokenSymbol}</span>
             <span>Tier 2 (200 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}</span>
@@ -146,56 +223,14 @@ function Participate() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                marginTop: "12px",
+                marginTop: "auto",
+                marginBottom: 6,
                 fontSize: 15,
               }}
             >
-              <span>Your sTOS: 5,000</span>
+              <span>Your sTOS: </span>
               <span style={{ color: "#0070ED", fontWeight: "bold" }}>
                 Your tier:
-              </span>
-            </div>
-          </article>
-          <div
-            style={{
-              borderLeft: "1px solid black",
-              marginLeft: "15px",
-              marginRight: "15px",
-            }}
-          ></div>
-          <article
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <span>
-              Round 1 - {saleInfo?.total1rdSaleAmount} {tokenInfo?.tokenSymbol}{" "}
-            </span>
-            <span>
-              {" "}
-              {formatTimestamp(timeInfo?.round1StartTime) ??
-                "round1StartTime"}{" "}
-              ~ {formatTimestamp(timeInfo?.round1EndTime) ?? "round1EndTime"}{" "}
-            </span>
-            <span>
-              Round 2 - {saleInfo?.total1rdSaleAmount} {tokenInfo?.tokenSymbol}
-            </span>
-            <span>
-              {" "}
-              {formatTimestamp(timeInfo?.round2StartTime) ?? "-"} ~{" "}
-              {formatTimestamp(timeInfo?.round2EndTime) ?? "-"}{" "}
-            </span>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginTop: "auto",
-                fontSize: 15,
-              }}
-            >
-              <span style={{ color: "#0070ED", fontWeight: "bold" }}>
-                Current status : {status?.currentStep ?? "not setup yet"}
               </span>
             </div>
           </article>

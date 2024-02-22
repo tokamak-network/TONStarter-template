@@ -1,4 +1,6 @@
 import HeadTitle from "./public/HeadTitle";
+import { VaultType } from "../types";
+import { useMemo } from "react";
 
 function VaultInfoRow({
   title,
@@ -21,13 +23,89 @@ function VaultInfoRow({
   );
 }
 
-function VaultCard(props: { title: string; address: string }) {
-  const { title, address } = props;
+function ScheduleRow() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        marginTop: 10,
+      }}
+    >
+      <span style={{ fontSize: 14, marginTop: "auto" }}>
+        --- Claim Schedule ---
+      </span>
+      <VaultInfoRow title="round 1" content={"10,000,000 TKB"} />
+      <span style={{ fontSize: 12, textAlign: "right" }}>
+        2022.06.24 17:00:01
+      </span>
+    </div>
+  );
+}
+
+function VaultCard(props: {
+  vaultType: VaultType;
+  title: string;
+  address: string;
+}) {
+  const { title, address, vaultType } = props;
+
+  const rowComponents = useMemo(() => {
+    switch (props.vaultType) {
+      case "Sale":
+        return (
+          <>
+            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <VaultInfoRow title="Round 1." content={"5,000,000 TKB"} />
+            <VaultInfoRow title="Round 2." content={"5,000,000 TKB"} />
+            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <ScheduleRow />
+          </>
+        );
+      case "Liquidity":
+        return (
+          <>
+            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <VaultInfoRow title="Price Range" content={"Full"} />
+            <VaultInfoRow title="Pool Address" content={"0x"} />
+            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <ScheduleRow />
+          </>
+        );
+      case "TONStarter":
+        return (
+          <>
+            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <span style={{ fontSize: 12, textAlign: "right" }}>
+              TON-TOS LP Reward : 50%
+            </span>
+            <span style={{ fontSize: 12, textAlign: "right" }}>
+              TON Staker : 25%
+            </span>
+            <span style={{ fontSize: 12, textAlign: "right" }}>
+              TOS Staker : 25%
+            </span>
+            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <ScheduleRow />
+          </>
+        );
+      default:
+        return (
+          <>
+            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <ScheduleRow />
+          </>
+        );
+    }
+  }, [props]);
+
   return (
     <div
       style={{
         width: "200px",
-        height: "250px",
+        minHeight: "250px",
         border: "1px solid black",
         borderRadius: 16,
         display: "flex",
@@ -40,18 +118,11 @@ function VaultCard(props: { title: string; address: string }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          minHeight: "35px",
         }}
       >
-        <span>{title}</span>
-        <button
-          onClick={() =>
-            window.open(
-              `https://explorer.titan-goerli.tokamak.network/address/${address}`
-            )
-          }
-        >
-          explorer
-        </button>
+        <span style={{ fontSize: 18 }}>{title}</span>
+        {vaultType === "Liquidity" && <button onClick={() => {}}>send</button>}
       </div>
       <span
         style={{
@@ -62,10 +133,7 @@ function VaultCard(props: { title: string; address: string }) {
           marginBottom: 5,
         }}
       ></span>
-      <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
-      <VaultInfoRow title="Round 1." content={"5,000,000 TKB"} />
-      <VaultInfoRow title="Round 2." content={"5,000,000 TKB"} />
-      <VaultInfoRow title="Liquidity" content={"1,000,000 TKB"} />
+      {rowComponents}
     </div>
   );
 }
@@ -80,6 +148,7 @@ function Vaults() {
       }}
     >
       <HeadTitle title="Vaults"></HeadTitle>
+      <button style={{ marginBottom: 20 }}>distribute all</button>
       <div
         style={{
           display: "flex",
@@ -88,11 +157,11 @@ function Vaults() {
           columnGap: "10px",
         }}
       >
-        <VaultCard title="Sale" address="0x" />
-        <VaultCard title="Liquidity" address="0x" />
-        <VaultCard title="Ecosystem" address="0x" />
-        <VaultCard title="Team" address="0x" />
-        <VaultCard title="TONStarter" address="0x" />
+        <VaultCard vaultType="Sale" title="Sale" address="0x" />
+        <VaultCard vaultType="Liquidity" title="Liquidity" address="0x" />
+        <VaultCard vaultType="Ecosystem" title="Ecosystem" address="0x" />
+        <VaultCard vaultType="Team" title="Team" address="0x" />
+        <VaultCard vaultType="TONStarter" title="TONStarter" address="0x" />
       </div>
     </section>
   );

@@ -19,3 +19,10 @@ export type {
   Status,
   TokenInfo,
 };
+
+export type VaultType =
+  | "Sale"
+  | "Liquidity"
+  | "Ecosystem"
+  | "Team"
+  | "TONStarter";
