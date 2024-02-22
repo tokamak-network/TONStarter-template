@@ -6,6 +6,7 @@ import {
   ClaimInfo,
   UserInfo,
   Status,
+  TokenInfo,
 } from "tokamak-dapp-sdk/dist/types/tonstarter";
 
 export type {
@@ -16,4 +17,5 @@ export type {
   ClaimInfo,
   UserInfo,
   Status,
+  TokenInfo,
 };

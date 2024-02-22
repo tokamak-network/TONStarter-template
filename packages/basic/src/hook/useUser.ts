@@ -37,7 +37,7 @@ export const useUser = () => {
       const accountAddress = await signer.getAddress();
       setUserAccount(accountAddress);
     }
-  }, [window.ethereum, window.web3]);
+  }, []);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -62,10 +62,13 @@ export const useUser = () => {
       const convertedBalance = weiToDecimal(balance);
       setTonBalance(Number(convertedBalance));
     };
-    if (userAccount && TON_CONTRACT) {
+    if (userAccount) {
       fetchTonBalance();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAccount]);
+
+  console.log("TON", tonBalance);
 
   return { connectWallet, userAccount, tonBalance };
 };

@@ -1,5 +1,5 @@
 import HeadTitle from "./public/HeadTitle";
-import TxTable from "./public/TxTable";
+// import TxTable from "./public/TxTable";
 
 function Transactions() {
   return (

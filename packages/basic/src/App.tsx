@@ -15,14 +15,15 @@ function App() {
         flexDirection: "column",
         alignItems: "center",
         paddingTop: 10,
-        paddingBottom: 10,
+        paddingBottom: 50,
+        overflow: "hidden",
       }}
     >
       <Header />
       <Overview />
       <Participate />
       <Vaults />
-      <Transactions />
+      {/* <Transactions /> */}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import ProjectImage from "../assets/ProjectImage.svg";
 import "./overview.css";
 import HeadTitle from "./public/HeadTitle";
 import { useProjectInfo } from "../hook";
+import { formatTimestamp } from "../utils/convertTimestamp";
 
 function ProgressBar() {
   const [progress, setProgress] = useState(15); // State to manage progress
@@ -22,8 +23,7 @@ function ProgressBar() {
 }
 
 function Overview() {
-  const { projectInfo, timeInfo, saleInfo, status, manageInfo } =
-    useProjectInfo();
+  const { projectInfo, saleInfo, status } = useProjectInfo();
 
   return (
     <section
@@ -60,8 +60,11 @@ function Overview() {
       <article style={{ textAlign: "center" }}>
         <HeadTitle
           title={status?.currentStep ?? "-"}
-          style={{ margin: 0, marginBottom: 15 }}
+          style={{ margin: 0, marginBottom: 0 }}
         ></HeadTitle>
+        <div style={{ marginBottom: 15 }}>{`(${formatTimestamp(
+          status?.currentStepEndDate
+        )})`}</div>
         <ProgressBar />
         {saleInfo ? (
           <p style={{ textAlign: "right", fontSize: 12, fontWeight: "bold" }}>

@@ -3,20 +3,18 @@ import { useMemo } from "react";
 import { useProjectInfo } from "../hook";
 import HeadTitle from "./public/HeadTitle";
 import { useUser } from "../hook/useUser";
+import { formatTimestamp } from "../utils/convertTimestamp";
 
 function Participate() {
-  const { status, userInfo, saleInfo } = useProjectInfo();
+  const { status, userInfo, saleInfo, timeInfo, tokenInfo } = useProjectInfo();
   const { tonBalance } = useUser();
 
-  // console.log("tonBalance", tonBalance);
-  // console.log(userInfo);
-  // console.log(saleInfo);
-  // console.log(status);
+  console.log("userInfo", userInfo);
 
   const ParticipatingContainer = useMemo(() => {
     switch (status?.currentStep) {
       case "snapshot":
-        return <>gogo</>;
+        return <>waiting for snapshot</>;
 
       case "whitelist":
         return (
@@ -115,12 +113,16 @@ function Participate() {
             <div>
               <span>Puchased : </span>
             </div>
-            <div>
-              <span>Available to Claim : </span>
-            </div>
-            <div>
-              <span>Remained Amount : </span>
-            </div>
+            {status?.currentStep === "claim" && (
+              <div>
+                <span>Available to Claim : </span>
+              </div>
+            )}
+            {status?.currentStep === "claim" && (
+              <div>
+                <span>Remained Amount : </span>
+              </div>
+            )}
           </div>
         </article>
         <section
@@ -132,10 +134,14 @@ function Participate() {
           }}
         >
           <article style={{ display: "flex", flexDirection: "column" }}>
-            <span>TIER 1 (10,000 sTOS) : 2,000,000 TKB</span>
-            <span>TIER 2 (5,000 sTOS) : 1,000,000 TKB</span>
-            <span>TIER 3 (3,000 sTOS) : 1,000,000 TKB</span>
-            <span>TIER 4 (1,000 sTOS) : 1,000,000 TKB</span>
+            <span>Tier 1 (100 sTOS) : 2,000,000 {tokenInfo?.tokenSymbol}</span>
+            <span>Tier 2 (200 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}</span>
+            <span>
+              Tier 3 (1,000 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}
+            </span>
+            <span>
+              Tier 4 (4,000 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}
+            </span>
             <div
               style={{
                 display: "flex",
@@ -163,10 +169,23 @@ function Participate() {
               flexDirection: "column",
             }}
           >
-            <span>Round 1 - 5,000,000 TKB </span>
-            <span> 2024.01.01 17:00:00 ~ 2024.01.07 16:59:59 </span>
-            <span>Round 2 - 5,000,000</span>
-            <span>2024.01.01 17:00:00 ~ 2024.01.07 16:59:59</span>
+            <span>
+              Round 1 - {saleInfo?.total1rdSaleAmount} {tokenInfo?.tokenSymbol}{" "}
+            </span>
+            <span>
+              {" "}
+              {formatTimestamp(timeInfo?.round1StartTime) ??
+                "round1StartTime"}{" "}
+              ~ {formatTimestamp(timeInfo?.round1EndTime) ?? "round1EndTime"}{" "}
+            </span>
+            <span>
+              Round 2 - {saleInfo?.total1rdSaleAmount} {tokenInfo?.tokenSymbol}
+            </span>
+            <span>
+              {" "}
+              {formatTimestamp(timeInfo?.round2StartTime) ?? "-"} ~{" "}
+              {formatTimestamp(timeInfo?.round2EndTime) ?? "-"}{" "}
+            </span>
             <div
               style={{
                 display: "flex",

@@ -21,7 +21,8 @@ function VaultInfoRow({
   );
 }
 
-function VaultCard() {
+function VaultCard(props: { title: string; address: string }) {
+  const { title, address } = props;
   return (
     <div
       style={{
@@ -34,7 +35,24 @@ function VaultCard() {
         flexDirection: "column",
       }}
     >
-      <span>Public</span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <span>{title}</span>
+        <button
+          onClick={() =>
+            window.open(
+              `https://explorer.titan-goerli.tokamak.network/address/${address}`
+            )
+          }
+        >
+          explorer
+        </button>
+      </div>
       <span
         style={{
           width: "100%",
@@ -70,28 +88,12 @@ function Vaults() {
           columnGap: "10px",
         }}
       >
-        <VaultCard />
-        <VaultCard />
-        <VaultCard />
-        <VaultCard />
-        <VaultCard />
+        <VaultCard title="Sale" address="0x" />
+        <VaultCard title="Liquidity" address="0x" />
+        <VaultCard title="Ecosystem" address="0x" />
+        <VaultCard title="Team" address="0x" />
+        <VaultCard title="TONStarter" address="0x" />
       </div>
-      {/* <div style={{ display: "flex", flexDirection: "column" }}>
-          <button>Public</button>
-          <button>Initial Liquidity</button>
-          <button>TON Staker</button>
-          <button>TOS Staker</button>
-          <button>TOS-TON LP</button>
-          <button>TOS-TKB LP</button>
-        </div>
-        <article style={{ display: "flex" }}>
-          <table>
-            <th>Token</th>
-            <th>Public Round 1</th>
-            <th>Public Round 2</th>
-            <th>go</th>
-          </table>
-        </article> */}
     </section>
   );
 }
