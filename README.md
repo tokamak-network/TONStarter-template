@@ -9,7 +9,7 @@ All templates are built on a vanilla environment and React CRA, allowing for fre
 - [default](https://github.com/tokamak-network/TONStarter-templates/tree/main/packages/basic)
 - [tokamak-design](https://github.com/tokamak-network/TONStarter-templates/tree/main/packages/tokamak-design)
 
-## Env samples
+## Env sample
 
 A .env file for configuration should be created in the root directory of every template, and a sample is provided as follows.
 
