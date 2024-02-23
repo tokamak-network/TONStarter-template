@@ -15,10 +15,10 @@ function Participate() {
     tokenInfo,
     claimInfo,
     manageInfo,
+    participate,
+    tierInfo,
   } = useProjectInfo();
   const { tonBalance } = useUser();
-
-  console.log(manageInfo);
 
   const ParticipatingContainer = useMemo(() => {
     switch (status?.currentStep) {
@@ -31,10 +31,13 @@ function Participate() {
             {" "}
             <button
               style={{
-                border: "1px solid black",
+                backgroundColor: "#0070ED",
+                border: 0,
+                color: "#fff",
                 borderRadius: 6,
                 marginLeft: 10,
               }}
+              onClick={() => participate(1)}
             >
               add whitelist
             </button>
@@ -91,7 +94,7 @@ function Participate() {
       default:
         return <>-</>;
     }
-  }, [status?.currentStep]);
+  }, [status?.currentStep, participate]);
 
   return (
     <section
@@ -211,13 +214,21 @@ function Participate() {
             }}
           ></div>
           <article style={{ display: "flex", flexDirection: "column" }}>
-            <span>Tier 1 (100 sTOS) : 2,000,000 {tokenInfo?.tokenSymbol}</span>
-            <span>Tier 2 (200 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}</span>
             <span>
-              Tier 3 (1,000 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}
+              Tier 1 (100 sTOS) : {commafy(tierInfo?.[1].amount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}
             </span>
             <span>
-              Tier 4 (4,000 sTOS) : 1,000,000 {tokenInfo?.tokenSymbol}
+              Tier 2 (200 sTOS) : {commafy(tierInfo?.[2].amount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}
+            </span>
+            <span>
+              Tier 3 (1,000 sTOS) : {commafy(tierInfo?.[3].amount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}
+            </span>
+            <span>
+              Tier 4 (4,000 sTOS) : {commafy(tierInfo?.[4].amount, 0)}{" "}
+              {tokenInfo?.tokenSymbol}
             </span>
             <div
               style={{

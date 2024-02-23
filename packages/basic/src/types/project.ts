@@ -7,6 +7,7 @@ import {
   UserInfo,
   Status,
   TokenInfo,
+  TierInfo,
 } from "tokamak-dapp-sdk/dist/types/tonstarter";
 
 export type {
@@ -18,6 +19,7 @@ export type {
   UserInfo,
   Status,
   TokenInfo,
+  TierInfo,
 };
 
 export type VaultType =

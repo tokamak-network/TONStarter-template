@@ -68,7 +68,5 @@ export const useUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAccount]);
 
-  console.log("TON", tonBalance);
-
   return { connectWallet, userAccount, tonBalance };
 };

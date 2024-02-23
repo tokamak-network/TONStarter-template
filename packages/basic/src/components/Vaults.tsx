@@ -1,6 +1,9 @@
 import HeadTitle from "./public/HeadTitle";
 import { VaultType } from "../types";
 import { useMemo } from "react";
+import { useProjectInfo, useSchedule } from "../hook";
+import { formatTimestamp } from "../utils/convertTimestamp";
+import commafy from "../utils/commafy";
 
 function VaultInfoRow({
   title,
@@ -24,22 +27,42 @@ function VaultInfoRow({
 }
 
 function ScheduleRow() {
+  const { tokenInfo } = useProjectInfo();
+  const { schedule } = useSchedule();
+
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        marginTop: 10,
+        marginTop: 20,
       }}
     >
       <span style={{ fontSize: 14, marginTop: "auto" }}>
         --- Claim Schedule ---
       </span>
-      <VaultInfoRow title="round 1" content={"10,000,000 TKB"} />
-      <span style={{ fontSize: 12, textAlign: "right" }}>
-        2022.06.24 17:00:01
-      </span>
+      {schedule?.map(
+        (
+          item: {
+            date: number;
+            amount: number;
+          },
+          index: number
+        ) => {
+          return (
+            <>
+              <VaultInfoRow
+                title={`round ${index + 1}`}
+                content={`${commafy(item.amount)} ${tokenInfo?.tokenSymbol}`}
+              />
+              <span style={{ fontSize: 12, textAlign: "right" }}>
+                {formatTimestamp(item.date)}
+              </span>
+            </>
+          );
+        }
+      )}
     </div>
   );
 }
@@ -104,7 +127,7 @@ function VaultCard(props: {
   return (
     <div
       style={{
-        width: "200px",
+        width: "225px",
         minHeight: "250px",
         border: "1px solid black",
         borderRadius: 16,
@@ -122,7 +145,32 @@ function VaultCard(props: {
         }}
       >
         <span style={{ fontSize: 18 }}>{title}</span>
-        {vaultType === "Liquidity" && <button onClick={() => {}}>send</button>}
+        {vaultType === "Sale" && (
+          <button
+            style={{
+              backgroundColor: "#0070ED",
+              border: 0,
+              color: "#fff",
+              borderRadius: 6,
+            }}
+            onClick={() => {}}
+          >
+            Send
+          </button>
+        )}
+        {vaultType === "Liquidity" && (
+          <button
+            style={{
+              backgroundColor: "#0070ED",
+              border: 0,
+              color: "#fff",
+              borderRadius: 6,
+            }}
+            onClick={() => {}}
+          >
+            Create a pool
+          </button>
+        )}
       </div>
       <span
         style={{
@@ -148,7 +196,17 @@ function Vaults() {
       }}
     >
       <HeadTitle title="Vaults"></HeadTitle>
-      <button style={{ marginBottom: 20 }}>distribute all</button>
+      <button
+        style={{
+          backgroundColor: "#0070ED",
+          border: 0,
+          color: "#fff",
+          borderRadius: 6,
+          marginBottom: 20,
+        }}
+      >
+        Distribute all
+      </button>
       <div
         style={{
           display: "flex",
