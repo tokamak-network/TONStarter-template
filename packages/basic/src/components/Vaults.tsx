@@ -8,9 +8,13 @@ import commafy from "../utils/commafy";
 function VaultInfoRow({
   title,
   content,
+  onClick,
+  contentStyle,
 }: {
   title: string;
-  content: string | number;
+  content?: string | number;
+  onClick?: () => void;
+  contentStyle?: React.CSSProperties;
 }) {
   return (
     <div
@@ -21,7 +25,9 @@ function VaultInfoRow({
       }}
     >
       <span>{title}</span>
-      <span>{content}</span>
+      <span style={{ ...contentStyle }} onClick={onClick}>
+        {content}
+      </span>
     </div>
   );
 }
@@ -39,8 +45,8 @@ function ScheduleRow() {
         marginTop: 20,
       }}
     >
-      <span style={{ fontSize: 14, marginTop: "auto" }}>
-        --- Claim Schedule ---
+      <span style={{ fontSize: 14, marginTop: "auto", textAlign: "center" }}>
+        ---- Claim Schedule ----
       </span>
       {schedule?.map(
         (
@@ -67,39 +73,65 @@ function ScheduleRow() {
   );
 }
 
-function VaultCard(props: {
-  vaultType: VaultType;
-  title: string;
-  address: string;
-}) {
-  const { title, address, vaultType } = props;
+function VaultCard(props: { vaultType: VaultType; title: string }) {
+  const { title, vaultType } = props;
+  const { projectInfo, tokenInfo, manageInfo } = useProjectInfo();
 
   const rowComponents = useMemo(() => {
+    const tokenSymbol = tokenInfo?.tokenSymbol;
+    const VaultAdmin = () => {
+      return (
+        <VaultInfoRow
+          title="Vault Admin"
+          content={`${projectInfo?.owner.slice(
+            0,
+            4
+          )}...${projectInfo?.owner.slice(-4)}`}
+          contentStyle={{
+            cursor: "pointer",
+            color: "blue",
+            textDecoration: "underline",
+          }}
+          onClick={() =>
+            window.open(
+              `https://explorer.titan-goerli.tokamak.network/address/${projectInfo?.owner}`
+            )
+          }
+        />
+      );
+    };
+
     switch (props.vaultType) {
       case "Sale":
         return (
           <>
-            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
-            <VaultInfoRow title="Round 1." content={"5,000,000 TKB"} />
-            <VaultInfoRow title="Round 2." content={"5,000,000 TKB"} />
-            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <VaultInfoRow
+              title="Token"
+              content={`${
+                manageInfo &&
+                commafy(
+                  manageInfo?.set1rdTokenAmount + manageInfo?.set2rdTokenAmount,
+                  0
+                )
+              } ${tokenSymbol}`}
+            />
+            <VaultAdmin />
             <ScheduleRow />
           </>
         );
       case "Liquidity":
         return (
           <>
-            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <VaultInfoRow title="Token" content={`${tokenSymbol}`} />
             <VaultInfoRow title="Price Range" content={"Full"} />
-            <VaultInfoRow title="Pool Address" content={"0x"} />
-            <VaultInfoRow title="Vault Admin" content={"0x"} />
-            <ScheduleRow />
+            <VaultInfoRow title="Pool Address" content={"-"} />
+            <VaultAdmin />
           </>
         );
       case "TONStarter":
         return (
           <>
-            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
+            <VaultInfoRow title="Token" content={`${tokenSymbol}`} />
             <span style={{ fontSize: 12, textAlign: "right" }}>
               TON-TOS LP Reward : 50%
             </span>
@@ -109,20 +141,20 @@ function VaultCard(props: {
             <span style={{ fontSize: 12, textAlign: "right" }}>
               TOS Staker : 25%
             </span>
-            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <VaultAdmin />
             <ScheduleRow />
           </>
         );
       default:
         return (
           <>
-            <VaultInfoRow title="Token" content={"10,000,000 TKB"} />
-            <VaultInfoRow title="Vault Admin" content={"0x"} />
+            <VaultInfoRow title="Token" content={`${tokenSymbol}`} />
+            <VaultAdmin />
             <ScheduleRow />
           </>
         );
     }
-  }, [props]);
+  }, [props, projectInfo?.owner, tokenInfo?.tokenSymbol, manageInfo]);
 
   return (
     <div
@@ -215,11 +247,11 @@ function Vaults() {
           columnGap: "10px",
         }}
       >
-        <VaultCard vaultType="Sale" title="Sale" address="0x" />
-        <VaultCard vaultType="Liquidity" title="Liquidity" address="0x" />
-        <VaultCard vaultType="Ecosystem" title="Ecosystem" address="0x" />
-        <VaultCard vaultType="Team" title="Team" address="0x" />
-        <VaultCard vaultType="TONStarter" title="TONStarter" address="0x" />
+        <VaultCard vaultType="Sale" title="Sale" />
+        <VaultCard vaultType="Liquidity" title="Liquidity" />
+        <VaultCard vaultType="Ecosystem" title="Ecosystem" />
+        <VaultCard vaultType="Team" title="Team" />
+        <VaultCard vaultType="TONStarter" title="TONStarter" />
       </div>
     </section>
   );

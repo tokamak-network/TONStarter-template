@@ -76,10 +76,7 @@ export const useProjectInfo = () => {
     };
 
     if (ProjectManagerSDK !== undefined) {
-      fetchProjectInfo().catch((e) => {
-        console.log("**fetch error on fetchProjectInfo()**");
-        console.log(e);
-      });
+      fetchProjectInfo().catch((e) => {});
     }
   }, [ProjectManagerSDK]);
 
@@ -121,7 +118,6 @@ export const useSchedule = () => {
         claimInterval,
         totalClaimCounts,
       } = claimInfo;
-      console.log("claimInfo", claimInfo);
 
       if (
         firstClaimTime &&
@@ -131,8 +127,6 @@ export const useSchedule = () => {
       ) {
         let scheduleArr: any[] = [];
         for (let i = 1; i <= totalClaimCounts; i++) {
-          console.log("gogo", i);
-
           if (i === 1) {
             scheduleArr.push({
               date: firstClaimTime,
