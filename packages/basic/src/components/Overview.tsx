@@ -6,12 +6,15 @@ import { useProjectInfo } from "../hook";
 import { formatTimestamp } from "../utils/convertTimestamp";
 
 function ProgressBar() {
-  const [progress, setProgress] = useState(15); // State to manage progress
+  const [progress, setProgress] = useState(0); // State to manage progress
+
+  //   const { saleInfo } = useProjectInfo();
+  // const progress = saleInfo?.total1rdSaleAmount / saleInfo?.total1rdSaleAmount * 100;
 
   // Function to increase progress
   const increaseProgress = () => {
-    if (progress < 100) {
-      setProgress(progress + 10); // Increase by 10% until 100%
+    if (progress > 100) {
+      setProgress(100);
     }
   };
 
@@ -70,7 +73,7 @@ function Overview() {
           <p style={{ textAlign: "right", fontSize: 12, fontWeight: "bold" }}>
             <span style={{ color: "rgb(69, 214, 32)" }}>
               {" "}
-              {saleInfo?.total1rdSaleAmount}
+              {saleInfo?.total1rdSaleAmount}{" "}
             </span>
             OF {saleInfo?.total1rdSaleAmount} {} SOLD
           </p>

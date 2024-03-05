@@ -1,6 +1,6 @@
 import React from "react";
 import { useMemo } from "react";
-import { useProjectInfo } from "../hook";
+import { useProjectContract, useProjectInfo } from "../hook";
 import HeadTitle from "./public/HeadTitle";
 import { useUser } from "../hook/useUser";
 import { formatTimestamp } from "../utils/convertTimestamp";
@@ -9,15 +9,14 @@ import commafy from "../utils/commafy";
 function Participate() {
   const {
     status,
-    userInfo,
-    saleInfo,
     timeInfo,
     tokenInfo,
     claimInfo,
     manageInfo,
-    participate,
     tierInfo,
+    userInfo,
   } = useProjectInfo();
+  const { participate } = useProjectContract();
   const { tonBalance } = useUser();
 
   const ParticipatingContainer = useMemo(() => {
@@ -37,7 +36,7 @@ function Participate() {
                 borderRadius: 6,
                 marginLeft: 10,
               }}
-              onClick={() => participate(1)}
+              onClick={() => participate()}
             >
               add whitelist
             </button>
@@ -54,8 +53,9 @@ function Participate() {
                 borderRadius: 6,
                 marginLeft: 10,
               }}
+              onClick={() => participate(1)}
             >
-              claim
+              participate
             </button>
           </>
         );
@@ -70,8 +70,9 @@ function Participate() {
                 borderRadius: 6,
                 marginLeft: 10,
               }}
+              onClick={() => participate(1)}
             >
-              claim
+              participate
             </button>
           </>
         );
@@ -86,6 +87,7 @@ function Participate() {
                 borderRadius: 6,
                 marginLeft: 10,
               }}
+              onClick={() => participate()}
             >
               claim
             </button>
@@ -115,7 +117,17 @@ function Participate() {
         }}
       >
         <article style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex" }}>{ParticipatingContainer}</div>
+          <form
+            style={{ display: "flex" }}
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              //@ts-ignore
+              const value = (e.target as HTMLFormElement).elements[0].value; //@ts-ignore
+              participate(value);
+            }}
+          >
+            {ParticipatingContainer}
+          </form>
           <div
             style={{ display: "flex", flexDirection: "column", marginTop: 10 }}
           >
@@ -123,16 +135,18 @@ function Participate() {
               <span>your TON : {tonBalance ?? "-"}</span>
             </div>
             <div>
-              <span>Puchased : </span>
+              <span>Puchased : {userInfo?.paidRound2 ?? "-"}</span>
             </div>
             {status?.currentStep === "claim" && (
               <div>
-                <span>Available to Claim : </span>
+                <span>
+                  Available to Claim : {userInfo?.claimableAmount ?? "-"}{" "}
+                </span>
               </div>
             )}
             {status?.currentStep === "claim" && (
               <div>
-                <span>Remained Amount : </span>
+                <span>Remained Amount : {userInfo?.paidRound2 ?? "-"}</span>
               </div>
             )}
           </div>

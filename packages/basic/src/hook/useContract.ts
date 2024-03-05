@@ -12,11 +12,12 @@ import {
   TierInfo,
 } from "../types";
 import { useUser } from "./useUser";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
+import { getSigner } from "../utils/signer";
+import { L2_TOKEN } from "../constants/config";
+import { parseEther } from "ethers/lib/utils";
 
 export const useContract = () => {};
-
-export const useTONStarterC = () => {};
 
 export const useProjectInfo = () => {
   const [projectInfo, setProjectInfo] = useState<ProjectInfo | undefined>(
@@ -34,7 +35,6 @@ export const useProjectInfo = () => {
   const [status, setStatus] = useState<Status | undefined>(undefined);
   const [isSet, setIsSet] = useState<Boolean | undefined>(false);
 
-  const L2_TOKEN = process.env.REACT_APP_L2TOKEN;
   const { userAccount } = useUser();
   const ProjectManagerSDK = useMemo(
     () =>
@@ -43,7 +43,7 @@ export const useProjectInfo = () => {
         l2Token: L2_TOKEN as string,
         account: userAccount,
       }),
-    [L2_TOKEN, userAccount]
+    [userAccount]
   );
 
   useEffect(() => {
@@ -80,10 +80,6 @@ export const useProjectInfo = () => {
     }
   }, [ProjectManagerSDK]);
 
-  const participate = async (amount: number) => {
-    await ProjectManagerSDK.participate(amount);
-  };
-
   return {
     projectInfo,
     manageInfo,
@@ -95,13 +91,77 @@ export const useProjectInfo = () => {
     tierInfo,
     isSet,
     status,
-    participate,
+    ProjectManagerSDK,
   };
 };
 
 type ScheduleItem = {
   date: number;
   amount: number;
+};
+
+export const useProjectContract = () => {
+  const { userAccount } = useUser();
+  const { status, ProjectManagerSDK } = useProjectInfo();
+
+  const SaleVaultProxy = ProjectManagerSDK.SaleVaultProxy;
+  const L2ProjectManagerProxy = ProjectManagerSDK.L2ProjectManagerProxy;
+
+  const participate = async (amount?: number) => {
+    const amountBN = parseEther(amount?.toString() ?? "0");
+
+    if (!SaleVaultProxy) return;
+    const signer = await getSigner();
+    switch (status?.currentStep) {
+      case "whitelist":
+        if (signer) await SaleVaultProxy.connect(signer).addWhiteList(L2_TOKEN);
+        break;
+      case "round1":
+        console.log("round1");
+        if (amount && signer)
+          await SaleVaultProxy.connect(signer).round1Sale(L2_TOKEN, amountBN);
+        break;
+      case "round2":
+        if (amount && signer)
+          await SaleVaultProxy.connect(signer).round2Sale(L2_TOKEN, amountBN);
+        break;
+      case "claim":
+        if (signer) {
+          await SaleVaultProxy.connect(signer).claim(L2_TOKEN);
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const exchangeWtonToTos = async (amount: number) => {
+    const signer = await getSigner();
+    const amountBN = parseEther(amount.toString());
+    if (signer && SaleVaultProxy) {
+      const hardcap = await SaleVaultProxy.hardcapCalcul(L2_TOKEN);
+      if (hardcap.eq(0)) {
+        return alert("This project failed to meet the hard cap condition");
+      }
+      await SaleVaultProxy.connect(signer).exchangeWTONtoTOS(
+        L2_TOKEN,
+        amountBN
+      );
+    }
+  };
+
+  const claimAll = async () => {
+    const isAvailable = await L2ProjectManagerProxy.availableClaimAll(
+      L2_TOKEN,
+      ["TEAM"]
+    );
+    const signer = await getSigner();
+
+    if (signer)
+      await L2ProjectManagerProxy.connect(signer).claimAll(L2_TOKEN, ["TEAM"]);
+  };
+
+  return { participate, claimAll, exchangeWtonToTos };
 };
 
 export const useSchedule = () => {

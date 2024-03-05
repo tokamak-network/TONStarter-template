@@ -1,9 +1,10 @@
 import HeadTitle from "./public/HeadTitle";
 import { VaultType } from "../types";
 import { useMemo } from "react";
-import { useProjectInfo, useSchedule } from "../hook";
+import { useProjectContract, useProjectInfo, useSchedule } from "../hook";
 import { formatTimestamp } from "../utils/convertTimestamp";
 import commafy from "../utils/commafy";
+import { L2_TOKEN } from "../constants/config";
 
 function VaultInfoRow({
   title,
@@ -58,13 +59,17 @@ function ScheduleRow() {
         ) => {
           return (
             <>
-              <VaultInfoRow
+              {/* <VaultInfoRow
                 title={`round ${index + 1}`}
                 content={`${commafy(item.amount)} ${tokenInfo?.tokenSymbol}`}
               />
               <span style={{ fontSize: 12, textAlign: "right" }}>
                 {formatTimestamp(item.date)}
-              </span>
+              </span> */}
+              <VaultInfoRow
+                title={`round ${index + 1}`}
+                content={`${formatTimestamp(item.date)}`}
+              />
             </>
           );
         }
@@ -76,6 +81,7 @@ function ScheduleRow() {
 function VaultCard(props: { vaultType: VaultType; title: string }) {
   const { title, vaultType } = props;
   const { projectInfo, tokenInfo, manageInfo } = useProjectInfo();
+  const { exchangeWtonToTos } = useProjectContract();
 
   const rowComponents = useMemo(() => {
     const tokenSymbol = tokenInfo?.tokenSymbol;
@@ -185,7 +191,7 @@ function VaultCard(props: { vaultType: VaultType; title: string }) {
               color: "#fff",
               borderRadius: 6,
             }}
-            onClick={() => {}}
+            onClick={() => exchangeWtonToTos(10000)}
           >
             Send
           </button>
@@ -219,6 +225,7 @@ function VaultCard(props: { vaultType: VaultType; title: string }) {
 }
 
 function Vaults() {
+  const { claimAll } = useProjectContract();
   return (
     <section
       style={{
@@ -236,6 +243,7 @@ function Vaults() {
           borderRadius: 6,
           marginBottom: 20,
         }}
+        onClick={() => claimAll()}
       >
         Distribute all
       </button>
